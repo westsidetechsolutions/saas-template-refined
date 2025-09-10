@@ -1,0 +1,165 @@
+/* src/app/(frontend)/styles.css */
+@import "tailwindcss";
+/* optional if you use it:
+@import "tw-animate-css";
+*/
+
+/* Let `.dark …` act as a variant (so `dark:bg-…` works with a .dark class) */
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------
+   Your design tokens
+---------------------------- */
+:root {
+  /* HSL tokens (numbers only). We’ll wrap them in hsl() inside @theme. */
+  --brand: 222 90% 56%;
+  --brand-foreground: 0 0% 100%;
+
+  --background: 0 0% 100%;
+  --foreground: 222 15% 12%;
+
+  --muted: 220 14% 96%;
+  --muted-foreground: 220 9% 35%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222 15% 12%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 15% 12%;
+
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 222 90% 56%;
+
+  --radius: 14px;
+  --shadow-soft: 0 2px 10px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+  --shadow-lift: 0 10px 30px rgba(0,0,0,.08);
+}
+
+/* Dark tokens */
+.dark {
+  --background: 222 15% 9%;
+  --foreground: 0 0% 100%;
+
+  --muted: 222 15% 12%;
+  --muted-foreground: 222 10% 70%;
+
+  --card: 222 15% 10%;
+  --card-foreground: 0 0% 100%;
+
+  --popover: 222 15% 10%;
+  --popover-foreground: 0 0% 100%;
+
+  --border: 222 10% 20%;
+  --input: 222 10% 20%;
+}
+
+/* ---------------------------
+   Map tokens → Tailwind theme
+   (this is what the broken file was missing)
+---------------------------- */
+@theme inline {
+  /* radii used by `rounded-[size]` if you want semantic sizes */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+
+  /* colors Tailwind classes will use */
+  --color-brand: hsl(var(--brand));
+  --color-brand-foreground: hsl(var(--brand-foreground));
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+}
+
+/* ---------------------------
+   Base layer & helpers
+---------------------------- */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  /* Typography utilities you defined before */
+  .heading-1 { @apply text-5xl md:text-7xl font-bold tracking-tight; }
+  .heading-2 { @apply text-4xl md:text-5xl font-bold tracking-tight; }
+  .heading-3 { @apply text-2xl md:text-3xl font-semibold; }
+  .body-lg   { @apply text-lg text-muted-foreground; }
+}
+
+@layer utilities {
+  .max-w-prose { max-width: 65ch; }
+}
+
+/* ---- Background helpers for rhythm & depth ---- */
+
+/* Soft radial glow from the top (uses your --brand color) */
+.bg-radial-brand {
+  background-image: radial-gradient(
+    800px 400px at 50% -120px,
+    hsl(var(--ring, var(--brand)) / 0.10),
+    transparent 70%
+  );
+  background-repeat: no-repeat;
+}
+
+/* Subtle grid with a top vignette to reduce noise near the header */
+.bg-grid-muted {
+  background-image:
+    linear-gradient(to bottom, transparent 31px, hsl(var(--border)) 32px),
+    linear-gradient(to right,  transparent 31px, hsl(var(--border)) 32px);
+  background-size: 32px 32px;
+  /* soften the top area so it doesn't collide with nav */
+  -webkit-mask-image: radial-gradient(120% 80% at 50% 0%, #000 50%, transparent 85%);
+  mask-image: radial-gradient(120% 80% at 50% 0%, #000 50%, transparent 85%);
+}
+
+/* ---------- ACCESSIBILITY: FOCUS RINGS ON INTERACTIVE ELEMENTS ---------- */
+@layer base {
+  :is(
+    a[href],
+    button,
+    [role="button"],
+    input:not([type="hidden"]),
+    select,
+    textarea,
+    summary,
+    [tabindex]:not([tabindex="-1"])
+  ):focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Remove default focus outline when not focus-visible */
+  :is(a, button, [role="button"], input, select, textarea, summary, [tabindex]:not([tabindex="-1"]))
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+/* ---------- VISUAL CONTRAST GUARDRAILS ---------- */
+/* Subtle utility to enforce minimum readable body color on muted surfaces */
+@layer utilities {
+  .on-muted-readable { color: color-mix(in oklch, var(--foreground) 80%, var(--muted-foreground)); }
+}
+
+/* Optional: outline on keyboard focus for any element you attach it to */
+.focus-outline {
+  @apply ring-2 ring-ring ring-offset-2 ring-offset-background;
+}

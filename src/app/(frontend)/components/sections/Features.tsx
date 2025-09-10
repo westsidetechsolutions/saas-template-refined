@@ -41,7 +41,7 @@ export default function Features(props: React.ComponentProps<typeof SectionWrapp
   const item = useFadeInUpVariants({ distance: 14, duration: 0.28 })
 
   return (
-    <SectionWrapper {...props}>
+    <SectionWrapper id="features" {...props}>
       <div className="text-center">
         <m.h2
           className="heading-2"

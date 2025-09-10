@@ -1,9 +1,8 @@
 // tailwind.config.ts
 import type { Config } from 'tailwindcss'
-import { fontFamily } from 'tailwindcss/defaultTheme'
 
 const config: Config = {
-  darkMode: ['class'],
+  darkMode: 'class',
   content: ['./src/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './src/app/**/*.{ts,tsx}'],
   theme: {
     container: {
@@ -38,7 +37,7 @@ const config: Config = {
         lift: '0 4px 12px rgba(0,0,0,0.12)',
       },
       fontFamily: {
-        sans: ['var(--font-sans)', ...fontFamily.sans],
+        sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },

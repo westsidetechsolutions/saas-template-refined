@@ -1,10 +1,13 @@
 import * as React from 'react'
 import { cn } from '@/lib/utils'
-import { EdgeFade } from '../ui/EdgeFade'
+import { EdgeFade } from '../ui/edgeFade'
 
 export interface SectionWrapperProps {
   children: React.ReactNode
   className?: string
+
+  /** HTML id attribute for the section */
+  id?: string
 
   /** When true, content spans full width (no container) */
   fullWidth?: boolean
@@ -23,6 +26,7 @@ export interface SectionWrapperProps {
 export function SectionWrapper({
   children,
   className,
+  id,
   fullWidth = false,
   bg = 'background',
   padding = 'default',
@@ -46,7 +50,7 @@ export function SectionWrapper({
         : 'py-20 md:py-28'
 
   return (
-    <section className={cn('relative', bgClass, paddingClass, className)}>
+    <section id={id} className={cn('relative', bgClass, paddingClass, className)}>
       {edgeTop && <EdgeFade position="top" />}
       {fullWidth ? children : <div className="mx-auto max-w-[1200px] px-6">{children}</div>}
       {edgeBottom && <EdgeFade position="bottom" />}

@@ -69,6 +69,9 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    plans: Plan;
+    usage: Usage;
+    api_keys: ApiKey;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -77,6 +80,9 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    plans: PlansSelect<false> | PlansSelect<true>;
+    usage: UsageSelect<false> | UsageSelect<true>;
+    api_keys: ApiKeysSelect<false> | ApiKeysSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -119,6 +125,25 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  timezone?:
+    | ('GMT+0' | 'GMT+1' | 'GMT+2' | 'GMT+3' | 'GMT+5' | 'GMT+8' | 'GMT+10' | 'GMT-5' | 'GMT-6' | 'GMT-7' | 'GMT-8')
+    | null;
+  role?: ('user' | 'admin') | null;
+  stripeCustomerId?: string | null;
+  stripeSubscriptionId?: string | null;
+  subscriptionStatus?:
+    | ('active' | 'canceled' | 'past_due' | 'unpaid' | 'incomplete' | 'incomplete_expired' | 'trialing' | 'paused')
+    | null;
+  subscriptionPlan?: string | null;
+  subscriptionCurrentPeriodEnd?: string | null;
+  lastPaymentDate?: string | null;
+  planPriceId?: string | null;
+  cancelAt?: string | null;
+  canceledAt?: string | null;
+  trialEnd?: string | null;
+  hasUsedTrial?: boolean | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -158,6 +183,62 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "plans".
+ */
+export interface Plan {
+  id: string;
+  name: string;
+  stripeProductId?: string | null;
+  stripePriceId?: string | null;
+  features?:
+    | {
+        feature?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "usage".
+ */
+export interface Usage {
+  id: string;
+  user: string | User;
+  periodStart: string;
+  periodEnd: string;
+  apiCalls: number;
+  itemsCreated: number;
+  storageMb: number;
+  lastUpdatedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "api_keys".
+ */
+export interface ApiKey {
+  id: string;
+  user: string | User;
+  name: string;
+  keyHash: string;
+  scopes?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  revokedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -170,6 +251,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'plans';
+        value: string | Plan;
+      } | null)
+    | ({
+        relationTo: 'usage';
+        value: string | Usage;
+      } | null)
+    | ({
+        relationTo: 'api_keys';
+        value: string | ApiKey;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -218,6 +311,21 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  timezone?: T;
+  role?: T;
+  stripeCustomerId?: T;
+  stripeSubscriptionId?: T;
+  subscriptionStatus?: T;
+  subscriptionPlan?: T;
+  subscriptionCurrentPeriodEnd?: T;
+  lastPaymentDate?: T;
+  planPriceId?: T;
+  cancelAt?: T;
+  canceledAt?: T;
+  trialEnd?: T;
+  hasUsedTrial?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -252,6 +360,51 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "plans_select".
+ */
+export interface PlansSelect<T extends boolean = true> {
+  name?: T;
+  stripeProductId?: T;
+  stripePriceId?: T;
+  features?:
+    | T
+    | {
+        feature?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "usage_select".
+ */
+export interface UsageSelect<T extends boolean = true> {
+  user?: T;
+  periodStart?: T;
+  periodEnd?: T;
+  apiCalls?: T;
+  itemsCreated?: T;
+  storageMb?: T;
+  lastUpdatedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "api_keys_select".
+ */
+export interface ApiKeysSelect<T extends boolean = true> {
+  user?: T;
+  name?: T;
+  keyHash?: T;
+  scopes?: T;
+  revokedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

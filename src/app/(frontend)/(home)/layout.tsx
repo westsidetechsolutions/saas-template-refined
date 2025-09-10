@@ -1,14 +1,14 @@
 // src/app/(frontend)/layout.tsx
-import './styles.css'
+import '../styles.css'
 import type { ReactNode } from 'react'
-import { ThemeBoot } from './theme-boot'
-import { Nav } from './components/layout/nav'
-import { Footer } from './components/layout/footer'
-import { SkipLink } from './components/a11y/SkipLink'
+import { ThemeBoot } from '../theme-boot'
+import { Nav } from '../components/layout/nav'
+import { Footer } from '../components/layout/footer'
+import { SkipLink } from '../components/a11y/SkipLink'
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="bg-background text-foreground">
+    <html lang="en" className="bg-background text-foreground" suppressHydrationWarning>
       <head>
         {/* Set theme instantly to avoid flash */}
         <ThemeBoot />

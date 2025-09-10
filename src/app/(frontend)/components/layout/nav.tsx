@@ -11,6 +11,7 @@ const LINKS = [
   { href: '/#features', label: 'Features' },
   { href: '/#pricing', label: 'Pricing' },
   { href: '/#faq', label: 'FAQ' },
+  { href: '/support', label: 'Support' },
 ]
 
 export function Nav() {

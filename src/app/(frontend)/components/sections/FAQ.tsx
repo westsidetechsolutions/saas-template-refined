@@ -21,7 +21,7 @@ const faqs = [
 
 export default function FAQ() {
   return (
-    <SectionWrapper>
+    <SectionWrapper id="faq">
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="heading-2">Frequently asked questions</h2>
       </div>

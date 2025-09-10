@@ -9,14 +9,14 @@ import {
   Pricing,
   FAQ,
   FinalCTA,
-} from './components/sections'
+} from '../components/sections'
 
 export default function HomePage() {
   return (
     <>
       <Hero />
       <SocialProof />
-      <Features bg="background" />
+      <Features />
       <Alternating />
       <Testimonials />
       <Pricing />

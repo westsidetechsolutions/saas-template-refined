@@ -12,6 +12,7 @@ export function ThemeBoot() {
               const theme = user || system;
               if (theme === "dark") document.documentElement.classList.add("dark");
               else document.documentElement.classList.remove("dark");
+              // Set color-scheme only after hydration to avoid mismatch
               document.documentElement.style.colorScheme = theme;
             } catch (_) {}
           `,

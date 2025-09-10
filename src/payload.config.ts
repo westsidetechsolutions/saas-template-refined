@@ -6,9 +6,15 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { resendAdapter } from '@payloadcms/email-resend'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Plans } from './collections/Plans'
+import Usage from './collections/Usage'
+import ApiKeys from './collections/ApiKeys'
+import { Feedback } from './collections/Feedback'
+import { GlobalSettings } from './collections/GlobalSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -20,7 +26,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  serverURL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  collections: [Users, Media, Plans, Usage, ApiKeys, Feedback, GlobalSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -28,6 +35,11 @@ export default buildConfig({
   },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
+  }),
+  email: resendAdapter({
+    defaultFromAddress: process.env.EMAIL_FROM || 'noreply@example.com',
+    defaultFromName: process.env.APP_NAME || 'Your App',
+    apiKey: process.env.RESEND_API_KEY || '',
   }),
   sharp,
   plugins: [
